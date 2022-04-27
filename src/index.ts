@@ -1,14 +1,14 @@
-export interface INode<T=undefined> {
-   parent?: Node<T>
-   left?: Node<T>
-   right?: Node<T>
-   prev: Node<T>
-   next: Node<T>
-   value: number 
-   source?: T
+export interface INode<T = undefined> {
+  parent?: Node<T>
+  left?: Node<T>
+  right?: Node<T>
+  prev: Node<T>
+  next: Node<T>
+  value: number
+  source?: T
 }
 
-class Node<T=undefined> implements INode<T> {
+class Node<T = undefined> implements INode<T> {
   public parent?: Node<T>
   public left?: Node<T>
   public right?: Node<T>
@@ -29,7 +29,7 @@ class Node<T=undefined> implements INode<T> {
   }
 }
 
-export class DLSTree<T=undefined> {
+export class DLSTree<T = undefined> {
   private root?: INode<T>
   private begin: INode<T> = new Node(0)
   private end: INode<T> = new Node(0)
@@ -139,11 +139,11 @@ export class DLSTree<T=undefined> {
     }
   }
 
-  getHead() {
+  getHead(): INode<T> | undefined {
     return this.begin.next === this.end ? undefined : this.begin.next
   }
 
-  getRoot() {
+  getRoot(): INode<T> | undefined {
     return this.root
   }
 
