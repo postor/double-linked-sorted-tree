@@ -67,7 +67,7 @@ test(`size`, () => {
   t.popMin()
   expect(t.size()).toStrictEqual(2)
   let head = t.getHead()
-  console.log({ head })
+  // console.log({ head })
   t.remove(head as any)
   expect(t.size()).toStrictEqual(1)
 })
