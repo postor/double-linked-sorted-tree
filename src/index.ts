@@ -142,6 +142,10 @@ export class DLSTree<T = undefined> {
   getHead(): INode<T> | undefined {
     return this.begin.next === this.end ? undefined : this.begin.next
   }
+  
+  getTail(): INode<T> | undefined {
+    return this.end.prev === this.begin ? undefined : this.end.prev
+  }
 
   getRoot(): INode<T> | undefined {
     return this.root

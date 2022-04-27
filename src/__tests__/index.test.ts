@@ -8,7 +8,6 @@ test(`iterate`, () => {
 
   let result = [...t.iterate()].map(x => x.value)
   expect(result).toStrictEqual(arr)
-
 })
 
 
@@ -93,7 +92,15 @@ test(`getHead`, () => {
   expect(t.getHead()).not.toBeUndefined()
   t.popMax()
   expect(t.getHead()).toBeUndefined()
+})
 
+test(`getTail`, () => {
+  let t = new DLSTree()
+  expect(t.getTail()).toBeUndefined()
+  t.add(1)
+  expect(t.getTail()).not.toBeUndefined()
+  t.popMax()
+  expect(t.getTail()).toBeUndefined()
 })
 
 
