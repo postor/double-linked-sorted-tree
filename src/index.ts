@@ -1,4 +1,14 @@
-class Node<T> {
+export interface INode<T=undefined> {
+   parent?: Node<T>
+   left?: Node<T>
+   right?: Node<T>
+   prev: Node<T>
+   next: Node<T>
+   value: number 
+   source?: T
+}
+
+class Node<T=undefined> implements INode<T> {
   public parent?: Node<T>
   public left?: Node<T>
   public right?: Node<T>
@@ -19,10 +29,11 @@ class Node<T> {
   }
 }
 
-export class DLSTree<T> {
-  private root?: Node<T>
-  private begin: Node<T> = new Node(0)
-  private end: Node<T> = new Node(0)
+export class DLSTree<T=undefined> {
+  private root?: INode<T>
+  private begin: INode<T> = new Node(0)
+  private end: INode<T> = new Node(0)
+  private _size = 0
 
   constructor() {
     this.begin.next = this.end
@@ -30,6 +41,7 @@ export class DLSTree<T> {
   }
 
   add(value: number, source?: T) {
+    this._size++
     let n = new Node(value, source)
 
     let { prev } = this.end
@@ -38,7 +50,7 @@ export class DLSTree<T> {
     prev.next = this.end.prev = n
     this.root = treeAdd(n, this.root)
 
-    function treeAdd(n: Node<T>, cur?: Node<T>): Node<T> {
+    function treeAdd(n: INode<T>, cur?: INode<T>): INode<T> {
       if (!cur) return n
       if (n.value > cur.value) {
         cur.right = treeAdd(n, cur.right)
@@ -51,46 +63,48 @@ export class DLSTree<T> {
     }
   }
 
-  remove(n: Node<T>) {
+  remove(n: INode<T>) {
+    this._size--
     let { prev, next, parent } = n
     prev.next = next
     next.prev = prev
 
     if (!parent) {
-      let { left, right } = this.root as Node<T>
-      return this.root = n == left ? right : left
+      let { left, right } = this.root as INode<T>
+      this.root = restruct(undefined, left, right)
+      return
     }
 
     move(parent, n)
 
-    function move(p: Node<T>, n: Node<T>) {
+    function move(p: INode<T>, n: INode<T>) {
       if (p.left === n) {
         p.left = restruct(p, n.left, n.right)
       } else {
         p.right = restruct(p, n.left, n.right)
       }
+    }
 
-      function restruct(p: Node<T>, l?: Node<T>, r?: Node<T>): Node<T> | undefined {
-        let rtn = (l && r)
-          ? (() => {
-            l.left = restruct(l, l.left, l.right)
-            l.right = r
-            r.parent = l
-            return l
-          })()
-          : (!l)
-            ? r
-            : undefined
+    function restruct(p?: INode<T>, l?: INode<T>, r?: INode<T>): INode<T> | undefined {
+      let rtn = (l && r)
+        ? (() => {
+          l.left = restruct(l, l.left, l.right)
+          l.right = r
+          r.parent = l
+          return l
+        })()
+        : l
+          ? l
+          : r
 
-        if (!rtn) return
+      if (!rtn) return
 
-        rtn.parent = p
-        return rtn
-      }
+      rtn.parent = p
+      return rtn
     }
   }
 
-  popMin(): Node<T> | undefined {
+  popMin(): INode<T> | undefined {
     // console.log({ root: this.root?.value })
     let t = this.root
     if (!t) return
@@ -103,7 +117,7 @@ export class DLSTree<T> {
     return t
   }
 
-  popMax(): Node<T> | undefined {
+  popMax(): INode<T> | undefined {
     // console.log({ root: this.root?.value })
     let t = this.root
     if (!t) return
@@ -123,6 +137,18 @@ export class DLSTree<T> {
       yield cur
       cur = cur.next
     }
+  }
+
+  getHead() {
+    return this.begin.next === this.end ? undefined : this.begin.next
+  }
+
+  getRoot() {
+    return this.root
+  }
+
+  size() {
+    return this._size
   }
 }
 

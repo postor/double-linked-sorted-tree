@@ -1,6 +1,6 @@
-import DLSTree from ".."
+import DLSTree, { INode } from ".."
 
-test(`basic`, () => {
+test(`iterate`, () => {
   let arr = [100, 1, 11, 30, 10, 4]
 
   let t = new DLSTree()
@@ -46,10 +46,67 @@ test(`popMin`, () => {
 test(`ref source`, () => {
   let arr = [100, 1, 11, 30, 10, 4]
 
-  let t = new DLSTree<{x:number}>()
-  arr.forEach(x => t.add(x,{x}))
+  let t = new DLSTree<{ x: number }>()
+  arr.forEach(x => t.add(x, { x }))
 
   let result = [...t.iterate()].map(x => x.source?.x)
   expect(result).toStrictEqual(arr)
 })
 
+
+
+test(`size`, () => {
+  let t = new DLSTree()
+  expect(t.size()).toStrictEqual(0)
+  t.add(10)
+  t.add(1)
+  t.add(100)
+  t.add(88)
+  expect(t.size()).toStrictEqual(4)
+  t.popMax()
+  t.popMin()
+  expect(t.size()).toStrictEqual(2)
+  let head = t.getHead()
+  console.log({ head })
+  t.remove(head as any)
+  expect(t.size()).toStrictEqual(1)
+})
+
+
+test(`getRoot`, () => {
+  let t = new DLSTree()
+  expect(t.getRoot()).toBeUndefined()
+  t.add(10)
+  t.add(1)
+  expect(t.getRoot()).not.toBeUndefined()
+  t.popMax()
+  expect(t.getRoot()).not.toBeUndefined()
+  t.popMax()
+  expect(t.getRoot()).toBeUndefined()
+})
+
+
+test(`getHead`, () => {
+  let t = new DLSTree()
+  expect(t.getHead()).toBeUndefined()
+  t.add(1)
+  expect(t.getHead()).not.toBeUndefined()
+  t.popMax()
+  expect(t.getHead()).toBeUndefined()
+
+})
+
+
+test(`remove`, () => {
+  let t = new DLSTree()
+  t.add(100)
+  t.add(50)
+  t.add(25)
+  t.add(75)
+  t.add(150)
+  t.add(125)
+  t.add(175)
+  t.remove(t.getRoot() as INode)
+  expect([...t.iterate()].map(x => x.value))
+    .toStrictEqual([50, 25, 75, 150, 125, 175])
+})
