@@ -53,7 +53,6 @@ test(`ref source`, () => {
 })
 
 
-
 test(`size`, () => {
   let t = new DLSTree()
   expect(t.size()).toStrictEqual(0)
@@ -127,4 +126,5 @@ test(`updateNodeValue`, () => {
   // console.log(n)
   t.updateNodeValue(n, 100)
   expect(t.popMax()?.value).toBe(100)
+
 })

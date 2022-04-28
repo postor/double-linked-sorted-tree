@@ -1,6 +1,6 @@
 {
   "name": "double-linked-sorted-tree",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "double linked sorted tree",
   "main": "dist/index.js",
   "scripts": {

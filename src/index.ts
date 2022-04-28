@@ -40,7 +40,9 @@ export class DLSTree<T = undefined> {
     this.end.prev = this.begin
   }
 
-  add(value: number, source?: T) {
+
+  add(...args: T extends NonNullable<T> ? [value: number, source: T] : [value: number]): void {
+    let [value, source = undefined] = args
     this._size++
     let n = new Node(value, source)
 
