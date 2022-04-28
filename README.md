@@ -22,16 +22,18 @@ interface INode<T = undefined> {
     source?: T;
 }
 
-export declare class DLSTree<T = undefined> {
+class DLSTree<T = undefined> {
     constructor();
     add(value: number, source?: T): void;
-    remove(n: INode<T>): void;
+    remove(node: INode<T>): void;
     popMin(): INode<T> | undefined;
     popMax(): INode<T> | undefined;
     iterate(): Generator<Node<T>, void, unknown>;
     getHead(): INode<T> | undefined;
+    getTail(): INode<T> | undefined;
     getRoot(): INode<T> | undefined;
     size(): number;
+    updateNodeValue(node: INode<T>, value: number): void;
 }
 ```
 

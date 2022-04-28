@@ -117,3 +117,14 @@ test(`remove`, () => {
   expect([...t.iterate()].map(x => x.value))
     .toStrictEqual([50, 25, 75, 150, 125, 175])
 })
+
+test(`updateNodeValue`, () => {
+  let t = new DLSTree()
+  t.add(1)
+  t.add(2)
+  t.add(3)
+  let n = t.getHead() as INode
+  // console.log(n)
+  t.updateNodeValue(n, 100)
+  expect(t.popMax()?.value).toBe(100)
+})

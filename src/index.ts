@@ -48,41 +48,47 @@ export class DLSTree<T = undefined> {
     n.prev = prev
     n.next = this.end
     prev.next = this.end.prev = n
-    this.root = treeAdd(n, this.root)
+    this.treeAdd(n)
+  }
 
-    function treeAdd(n: INode<T>, cur?: INode<T>): INode<T> {
+  private treeAdd(node: INode<T>) {
+    node.left = node.right = undefined
+    this.root = add(node, this.root)
+
+    function add(n: INode<T>, cur?: INode<T>): INode<T> {
+      // console.log({ n: n.value, cur: cur?.value })
       if (!cur) return n
       if (n.value > cur.value) {
-        cur.right = treeAdd(n, cur.right)
+        cur.right = add(n, cur.right)
         cur.right.parent = cur
       } else {
-        cur.left = treeAdd(n, cur.left)
+        cur.left = add(n, cur.left)
         cur.left.parent = cur
       }
       return cur
     }
   }
 
-  remove(n: INode<T>) {
+  remove(node: INode<T>) {
     this._size--
-    let { prev, next, parent } = n
+    let { prev, next } = node
     prev.next = next
     next.prev = prev
+    this.treeRemove(node)
+  }
 
+  private treeRemove(node: INode<T>) {
+    let { parent } = node
     if (!parent) {
       let { left, right } = this.root as INode<T>
       this.root = restruct(undefined, left, right)
       return
     }
 
-    move(parent, n)
-
-    function move(p: INode<T>, n: INode<T>) {
-      if (p.left === n) {
-        p.left = restruct(p, n.left, n.right)
-      } else {
-        p.right = restruct(p, n.left, n.right)
-      }
+    if (parent.left === node) {
+      parent.left = restruct(parent, node.left, node.right)
+    } else {
+      parent.right = restruct(parent, node.left, node.right)
     }
 
     function restruct(p?: INode<T>, l?: INode<T>, r?: INode<T>): INode<T> | undefined {
@@ -142,7 +148,7 @@ export class DLSTree<T = undefined> {
   getHead(): INode<T> | undefined {
     return this.begin.next === this.end ? undefined : this.begin.next
   }
-  
+
   getTail(): INode<T> | undefined {
     return this.end.prev === this.begin ? undefined : this.end.prev
   }
@@ -154,6 +160,23 @@ export class DLSTree<T = undefined> {
   size() {
     return this._size
   }
+
+  updateNodeValue(node: INode<T>, value: number) {
+    this.treeRemove(node)
+    // this.printTree()
+    node.value = value
+    this.treeAdd(node)
+  }
+
+  // printTree() {
+  //   let q = [this.root], rtn = []
+  //   while (q.length) {
+  //     let n = q.shift()
+  //     rtn.push(n ? n.value : '#')
+  //     if (n) q.push(n.left, n.right)
+  //   }
+  //   // console.log(rtn)
+  // }
 }
 
 export default DLSTree
